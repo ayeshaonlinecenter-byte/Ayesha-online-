@@ -1,0 +1,46 @@
+{
+  "collections": {
+    "services": {
+      "description": "Master catalog of online services offered by the center.",
+      "fields": {
+        "id": "String (Auto-generated)",
+        "nameHindi": "String",
+        "nameEnglish": "String",
+        "category": "String (GOVT, BILL, BANKING, OTHER)",
+        "description": "String",
+        "applicationFee": "Number",
+        "baseFee": "Number",
+        "requirements": "String",
+        "estimatedDays": "Number",
+        "isActive": "Boolean"
+      }
+    },
+    "orders": {
+      "description": "Customer service applications/orders.",
+      "fields": {
+        "id": "String (Auto-generated)",
+        "userId": "String (UID of the customer)",
+        "customerEmail": "String",
+        "customerName": "String",
+        "customerPhone": "String",
+        "fatherOrSpouseName": "String",
+        "address": "String",
+        "serviceId": "String",
+        "serviceNameHindi": "String",
+        "serviceNameEnglish": "String",
+        "applicationFeePaid": "Number",
+        "totalBaseFee": "Number",
+        "slipNumber": "String",
+        "transactionRef": "String",
+        "paymentMethod": "String",
+        "status": "String (PENDING, PROCESSING, COMPLETED, REJECTED)",
+        "govtReferenceNumber": "String",
+        "operatorNotes": "String",
+        "attachedDocuments": "Array<String>",
+        "additionalDetails": "String",
+        "createdAt": "Timestamp",
+        "updatedAt": "Timestamp"
+      }
+    }
+  }
+}

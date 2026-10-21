@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper to check if user is the admin/operator
+    function isOperator() {
+      return request.auth != null && request.auth.token.email == 'ayeshaonlinecenter@gmail.com';
+    }
+
+    // Services catalog: public read for all visitors, writable by operator & seeding
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Orders: authenticated users read own, operator reads all; operator updates/deletes
+    match /orders/{orderId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (request.auth.uid == resource.data.userId || isOperator());
+      allow update, delete: if isOperator();
+    }
+  }
+}

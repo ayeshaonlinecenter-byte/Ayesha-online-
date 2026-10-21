@@ -1,0 +1,6 @@
+{
+  "name": "Ayesha Online Center",
+  "description": "ऑनलाइन सेवा केंद्र ऐप: पैन कार्ड, आधार, प्रमाण पत्र, सरकारी फॉर्म, बिल भुगतान व सभी ऑनलाइन सेवाएं। तुरंत पेमेंट करें और हाथों-हाथ ऑफिशियल पावती स्लिप पाएं।",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

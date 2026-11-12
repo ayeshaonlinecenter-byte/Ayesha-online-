@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>Nikah & Walima Invitation | Zeba & Gulab</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@700;900&family=Great+Vibes&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Blogger Default Layout Cleanup */
+    .post-body, .post, .blog-posts, .main, .content-inner, .date-header, .post-title,
+    .post-footer, .comments, #header, #footer, .sidebar, #sidebar-wrapper, .share-buttons {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+    }
+    .date-header, .post-share-buttons, .post-title, .share-button-touch, .post-bottom {
+      display: none !important;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-deep: #120306;
+      --gold-primary: #D4AF37;
+      --gold-light: #F9F1DC;
+      --gold-dark: #8C6A18;
+      --text-light: #FAF6EE;
+      --text-muted: #E2D3C1;
+      --font-arabic: 'Amiri', serif;
+      --font-display: 'Cinzel Decorative', serif;
+      --font-script: 'Great Vibes', cursive;
+      --font-body: 'Montserrat', sans-serif;
+    }
+
+    html, body {
+      background-color: var(--bg-deep) !important;
+      color: var(--text-light);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      width: 100vw;
+      min-height: 100vh;
+      margin: 0 !important;
+      padding: 0 !important;
+      scroll-behavior: smooth;
+    }
+
+    body.locked {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Fixed Full-Screen Background MP4 Video */
+    .video-bg-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #wedding-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Dark Readability Tint over Video after opening */
+    #video-tint {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(18, 3, 6, 0.45) 0%, rgba(12, 2, 4, 0.82) 100%);
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.5s ease;
+    }
+
+    #video-tint.active {
+      opacity: 1;
+    }
+
+    /* Candle Glow Trail Canvas (Rule 1) */
+    #candle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Tap to Open Overlay (Sits over paused first frame of video) */
+    #tap-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 14vh;
+      background: linear-gradient(to top, rgba(10, 1, 3, 0.85) 0%, rgba(10, 1, 3, 0.15) 50%, transparent 100%);
+      cursor: pointer;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      text-align: center;
+    }
+
+    #tap-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .tap-btn-pulse {
+      padding: 15px 34px;
+      border-radius: 40px;
+      background: rgba(24, 4, 9, 0.88);
+      border: 2px solid var(--gold-primary);
+      color: var(--gold-light);
+      font-family: var(--font-display);
+      font-size: 16px;
+      letter-spacing: 2px;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+      animation: pulseBtn 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 18px rgba(212, 175, 55, 0.45); }
+      50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(249, 241, 220, 0.9); }
+    }
+
+    /* Floating Sound Control */
+    #sound-btn {
+      position: fixed;
+      bottom: 22px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(24, 4, 9, 0.85);
+      border: 1.5px solid var(--gold-primary);
+      color: var(--gold-light);
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      font-size: 18px;
+    }
+
+    /* Main Scrollable Content Layer (Reveals after Door Opens) */
+    #content-layer {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 45px 20px 100px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      pointer-events: none;
+      transition: opacity 1.5s ease, transform 1.5s ease;
+    }
+
+    #content-layer.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Typography & Cards */
+    .bismillah {
+      font-family: var(--font-arabic);
+      font-size: clamp(34px, 8.5vw, 48px);
+      line-height: 1.5;
+      color: var(--gold-light);
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 175, 55, 0.7);
+      margin-bottom: 4px;
+    }
+
+    .quran-line {
+      font-family: var(--font-script);
+      font-size: clamp(26px, 6.5vw, 35px);
+      color: var(--gold-primary);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+
+    .quran-sub {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+    }
+
+    .couple-names {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 9.5vw, 54px);
+      font-weight: 900;
+      color: var(--gold-light);
+      line-height: 1.15;
+      letter-spacing: 2px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
+      margin: 12px 0;
+    }
+
+    .weds-script {
+      font-family: var(--font-script);
+      font-size: 42px;
+      color: var(--gold-primary);
+      margin: -8px 0;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+    }
+
+    /* Translucent Glass Cards so Video Stays Visible Behind */
+    .glass-card {
+      background: rgba(24, 4, 9, 0.68);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 20px;
+      padding: 28px 20px;
+      margin-top: 26px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      position: relative;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px dashed rgba(212, 175, 55, 0.3);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    /* Countdown Grid (Rule 2) */
+    .cd-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .cd-box {
+      background: rgba(12, 2, 4, 0.72);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 12px;
+      padding: 12px 4px;
+    }
+
+    .cd-val {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 5.5vw, 28px);
+      color: var(--gold-light);
+      display: block;
+      line-height: 1;
+    }
+
+    .cd-lbl {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: block;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      text-align: left;
+      padding-left: 24px;
+      margin-top: 14px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--gold-primary), transparent);
+    }
+
+    .timeline-node {
+      position: relative;
+      margin-bottom: 22px;
+      padding-left: 18px;
+    }
+
+    .timeline-node:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-node::before {
+      content: '';
+      position: absolute;
+      left: -23px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+      box-shadow: 0 0 10px var(--gold-primary);
+    }
+
+    .event-title {
+      font-family: var(--font-arabic);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    .event-date {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    /* Gold Action Button */
+    .btn-gold {
+      display: inline-block;
+      min-height: 46px;
+      padding: 13px 32px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+      color: #120306;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.45);
+      margin-top: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .scroll-prompt {
+      margin-top: 22px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      animation: bounceScroll 2s infinite;
+    }
+
+    @keyframes bounceScroll {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(6px); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="locked">
+
+  <!-- Full-Screen Background MP4 Video (Paused on First Frame until Tapped) -->
+  <div class="video-bg-wrapper">
+    <video id="wedding-video" playsinline preload="auto" loop>
+      <source src="https://raw.githubusercontent.com/ayeshaonlinecenter-byte/Ayesha-online-/main/video%20for%20weding.mp4" type="video/mp4"/>
+    </video>
+  </div>
+  <div id="video-tint"></div>
+
+  <!-- Subtle Candle Glow Cursor & Touch Trail (Rule 1) -->
+  <canvas id="candle-canvas"></canvas>
+
+  <!-- Floating Sound Toggle Button -->
+  <button id="sound-btn" onclick="toggleSound()" title="Mute / Unmute Video Audio">🔊</button>
+
+  <!-- Tap to Open Overlay (Door Closed State) -->
+  <div id="tap-overlay" onclick="startInvitation()">
+    <div style="font-family: var(--font-arabic); font-size: 24px; color: var(--gold-light); margin-bottom: 14px; text-shadow: 0 2px 10px #000;">
+      بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+    </div>
+    <div class="tap-btn-pulse">TAP TO OPEN</div>
+  </div>
+
+  <!-- Main Scrollable Content Overlay (Appears as Door Opens) -->
+  <div id="content-layer">
+
+    <!-- Header & Names -->
+    <div style="padding-top: 15px;">
+      <div class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+      <div class="quran-line">In the name of Allah</div>
+      <div class="quran-sub">The Most Beneficent, The Most Merciful</div>
+
+      <p style="font-family: var(--font-arabic); font-size: 18px; color: var(--gold-primary); letter-spacing: 2px; margin-top: 10px;">
+        DUA-E-KHAIR
+      </p>
+      <h1 class="couple-names">Zeba</h1>
+      <div class="weds-script">&</div>
+      <h1 class="couple-names">Gulab</h1>
+
+      <p style="font-size: 15px; color: var(--gold-light); letter-spacing: 2px; margin-top: 10px; font-weight: 600;">
+        12 / 12 / 2026
+      </p>
+
+      <div class="scroll-prompt">↓ Scroll Down for Details ↓</div>
+    </div>
+
+    <!-- Live Countdown Timer (Rule 2) -->
+    <div class="glass-card">
+      <h3 style="font-family: var(--font-arabic); font-size: 24px; color: var(--gold-light);">Insha'Allah, The Celebration Begins In</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 3px;">12 December 2026 • Ratlam</p>
+      
+      <div class="cd-grid">
+        <div class="cd-box"><span class="cd-val" id="cd-days">00</span><span class="cd-lbl">Days</span></div>
+        <div class="cd-box"><span class="cd-val" id="cd-hours">00</span><span class="cd-lbl">Hours</span></div>
+        <div class="cd-box"><span class="cd-val" id="cd-mins">00</span><span class="cd-lbl">Mins</span></div>
+        <div class="cd-box"><span class="cd-val" id="cd-secs">00</span><span class="cd-lbl">Secs</span></div>
+      </div>
+    </div>
+
+    <!-- Program Functions Card -->
+    <div class="glass-card" style="text-align: left;">
+      <h3 style="font-family: var(--font-arabic); font-size: 26px; color: var(--gold-light); text-align: center; margin-bottom: 16px;">
+        Wedding Programs
+      </h3>
+      
+      <div class="timeline">
+        <div class="timeline-node">
+          <div class="event-title">Haldi</div>
+          <div class="event-date">9 / 12 / 2026 (Wednesday)</div>
+        </div>
+        <div class="timeline-node">
+          <div class="event-title">Mehandi</div>
+          <div class="event-date">10 / 12 / 2026 (Thursday)</div>
+        </div>
+        <div class="timeline-node">
+          <div class="event-title">Walima</div>
+          <div class="event-date">12 / 12 / 2026 (Saturday)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Venue Card -->
+    <div class="glass-card">
+      <h3 style="font-family: var(--font-arabic); font-size: 26px; color: var(--gold-light); margin-bottom: 6px;">Venue</h3>
+      <p style="color: var(--gold-primary); font-size: 18px; font-weight: 700; letter-spacing: 0.5px;">
+        Sumangal Gardan
+      </p>
+      <p style="color: var(--text-muted); font-size: 15px; margin-top: 4px;">
+        Ratlam, Madhya Pradesh
+      </p>
+      <a class="btn-gold" href="https://www.google.com/maps/search/?api=1&query=Sumangal+Garden+Ratlam" target="_blank">
+        Open Google Maps
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top: 30px;">
+      <p style="font-family: var(--font-arabic); font-size: 22px; color: var(--gold-primary);">TALEB-E-DUA</p>
+      <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Awaiting Your Gracious Presence</p>
+    </div>
+
+  </div>
+
+  <script>
+    var video = document.getElementById('wedding-video');
+    var tapOverlay = document.getElementById('tap-overlay');
+    var contentLayer = document.getElementById('content-layer');
+    var videoTint = document.getElementById('video-tint');
+    var soundBtn = document.getElementById('sound-btn');
+
+    // Make sure first frame of video shows cleanly on load
+    video.addEventListener('loadeddata', function() {
+      video.currentTime = 0.05;
+    });
+
+    // 1. Tap to Open Sequence
+    function startInvitation() {
+      tapOverlay.classList.add('hidden');
+      soundBtn.style.display = 'flex';
+
+      // Play video with original audio
+      video.muted = false;
+      video.play().catch(function() {
+        // Fallback if browser blocks unmuted autoplay
+        video.muted = true;
+        video.play();
+        soundBtn.innerHTML = '🔇';
+      });
+
+      // Wait 3.2 seconds for the door opening animation in the video, then reveal names & enable scroll
+      setTimeout(function() {
+        videoTint.classList.add('active');
+        contentLayer.classList.add('visible');
+        document.body.classList.remove('locked');
+      }, 3200);
+    }
+
+    function toggleSound() {
+      if (video.muted) {
+        video.muted = false;
+        soundBtn.innerHTML = '🔊';
+      } else {
+        video.muted = true;
+        soundBtn.innerHTML = '🔇';
+      }
+    }
+
+    // 2. Candle-like Subtle Glow Trail (Rule 1)
+    (function initCandleGlow() {
+      var canvas = document.getElementById('candle-canvas');
+      var ctx = canvas.getContext('2d');
+      var points = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function addPoint(x, y) {
+        points.push({
+          x: x, y: y,
+          radius: Math.random() * 8 + 8,
+          alpha: 0.65,
+          decay: Math.random() * 0.02 + 0.015
+        });
+      }
+
+      window.addEventListener('mousemove', function(e) { addPoint(e.clientX, e.clientY); }, { passive: true });
+      window.addEventListener('touchmove', function(e) {
+        if (e.touches && e.touches[0]) addPoint(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < points.length; i++) {
+          var p = points[i];
+          ctx.beginPath();
+          var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+          g.addColorStop(0, 'rgba(255, 235, 160, ' + p.alpha + ')');
+          g.addColorStop(0.4, 'rgba(255, 170, 50, ' + (p.alpha * 0.6) + ')');
+          g.addColorStop(1, 'rgba(210, 105, 30, 0)');
+          ctx.fillStyle = g;
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          p.alpha -= p.decay;
+          p.radius += 0.35;
+        }
+        points = points.filter(function(p) { return p.alpha > 0; });
+        requestAnimationFrame(render);
+      }
+      render();
+    })();
+
+    // 3. Live Countdown Timer to 12/12/2026 (Rule 2)
+    (function initCountdown() {
+      var targetDate = new Date('2026-12-12T19:00:00+05:30').getTime();
+
+      function update() {
+        var diff = targetDate - new Date().getTime();
+        if (diff > 0) {
+          var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          var h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          var s = Math.floor((diff % (1000 * 60)) / 1000);
+
+          document.getElementById('cd-days').innerText = d < 10 ? '0' + d : d;
+          document.getElementById('cd-hours').innerText = h < 10 ? '0' + h : h;
+          document.getElementById('cd-mins').innerText = m < 10 ? '0' + m : m;
+          document.getElementById('cd-secs').innerText = s < 10 ? '0' + s : s;
+        }
+      }
+      setInterval(update, 1000);
+      update();
+    })();
+  </script>
+</body>
+</html>
